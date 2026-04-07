@@ -16,8 +16,13 @@ jobs:
 
       - name: Stop old container if exists
         run: |
-          docker stop testi || echo "Ei vanhaa konttia"
-          docker rm testi || echo "Ei poistettavaa"
+          if (docker ps -q -f name=testi) {
+            docker stop testi
+            docker rm testi
+            echo "Vanha kontti pysäytetty ja poistettu"
+          } else {
+            echo "Ei vanhaa konttia"
+          }
 
       - name: Run Docker container locally
         run: |
