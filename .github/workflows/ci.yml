@@ -1,0 +1,22 @@
+name: DevOps CI
+
+on: push
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+        - uses: actions/checkout@v4
+        - name: Valdoi HTML
+
+          run: |
+            echo "Tarkistetaan index.html..."
+            cat index.html
+            echo "HTML OK!"
+
+        - name: Build Docker image
+          run: |
+            docker build -t devops-projekti .
+            echo "Docker image buildattu!"
+            
