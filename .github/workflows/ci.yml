@@ -3,20 +3,29 @@ name: DevOps CI
 on: push
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-        steps:
-        - uses: actions/checkout@v4
-        - name: Valdoi HTML
+      - name: Validoi HTML
+        run: |
+          echo "Tarkistetaan index.html..."
+          cat index.html
+          echo "✅ HTML OK"
 
-          run: |
-            echo "Tarkistetaan index.html..."
-            cat index.html
-            echo "HTML OK!"
+      - name: Build Docker image
+        run: |
+          docker build -t devops-projekti .
+          echo "✅ Docker image buildattu!"
 
-        - name: Build Docker image
-          run: |
-            docker build -t devops-projekti .
-            echo "Docker image buildattu!"
-            
+      - name: Run Docker container
+        run: |
+          docker run -d --name testi -p 8080:80 devops-projekti
+          echo "🚀 Docker container käynnistetty!"
+
+      - name: Testaa että kontti toimii
+        run: |
+          sleep 3
+          curl -I http://localhost:8080
+          echo "🧪 Testit OK!"
