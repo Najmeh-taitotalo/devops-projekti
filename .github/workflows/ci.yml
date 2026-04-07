@@ -14,14 +14,17 @@ jobs:
           docker build -t devops-projekti .
           echo "Docker image buildattu!"
 
-      - name: Stop old container if exists
+      - name: Stop and remove old container
+        shell: pwsh
         run: |
-          if (docker ps -q -f name=testi) {
-            docker stop testi
-            docker rm testi
-            echo "Vanha kontti pysäytetty ja poistettu"
+          $container = docker ps -a -q -f "name=testi"
+          if ($container) {
+            Write-Host "Stopping old container..."
+            docker stop $container | Out-Null
+            Write-Host "Removing old container..."
+            docker rm $container | Out-Null
           } else {
-            echo "Ei vanhaa konttia"
+            Write-Host "No old container found"
           }
 
       - name: Run Docker container locally
