@@ -22,10 +22,9 @@ jobs:
       - name: Run Docker container
         run: |
           docker run -d --name testi -p 8080:80 devops-projekti
-          echo "🚀 Docker container käynnistetty!"
-
-      - name: Testaa että kontti toimii
+          echo "✅ Docker container käynnissä!"
+      - name: Testaa sovellus
         run: |
-          sleep 3
-          curl -I http://localhost:8080
-          echo "🧪 Testit OK!"
+          sleep 5 # Odotetaan hetki, että sovellus on käynnissä
+          curl -f http://localhost:8080 || exit 1
+          echo "✅ Sovellus toimii odotetusti!"
